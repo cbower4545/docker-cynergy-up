@@ -1,0 +1,21 @@
+FROM dtr.cucloud.net/kuali/tomcat-up
+
+MAINTAINER Chad Bower "chadbower379@gmail.com"
+
+COPY keys/id_rsa /root/.ssh/id_rsa
+RUN chmod 400 /root/.ssh/id_rsa
+COPY known_hosts /root/.ssh/known_hosts
+COPY Puppetfile /
+
+RUN wget --user devops --password TFdEwwmt1Xk8! -O /var/lib/tomcat7/webapps/cynergy.war https://nexus.cucloud.net/nexus/content/repositories/cornell-cloud/edu/cornell/cynergy/cynergy-standalone-war/2.5.10-current/cynergy-standalone-war-2.5.10-current.war && \
+  chown tomcat7:tomcat7 /var/lib/tomcat7/webapps/cynergy.war
+
+RUN librarian-puppet install && \
+ puppet apply --modulepath=/modules -e "class { 'kuali::#ENV#': }" && \
+ rm -rf /modules && \
+ rm -rf /root/.ssh
+
+COPY bin/start-tomcat.sh /opt/start-tomcat.sh
+RUN chmod +x /opt/start-tomcat.sh
+
+CMD ["/opt/start-tomcat.sh"]
