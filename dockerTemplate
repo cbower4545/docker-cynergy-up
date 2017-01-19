@@ -7,7 +7,7 @@ RUN chmod 400 /root/.ssh/id_rsa
 COPY known_hosts /root/.ssh/known_hosts
 COPY Puppetfile /
 
-RUN wget --user devops --password TFdEwwmt1Xk8! -O /var/lib/tomcat7/webapps/cynergy.war https://nexus.cucloud.net/nexus/service/local/repositories/snapshots/content/edu/cornell/cynergy/cynergy-standalone-war/2.5.x-SNAPSHOT/cynergy-standalone-war-2.5.x-20170119.184236-30.war && \
+RUN wget --user devops --password TFdEwwmt1Xk8! -O /var/lib/tomcat7/webapps/cynergy.war https://nexus.cucloud.net/nexus/service/local/artifact/maven/redirect?r=snapshots&g=edu.cornell.cynergy&a=cynergy-standalone-war&v=LATEST && \
   chown tomcat7:tomcat7 /var/lib/tomcat7/webapps/cynergy.war
 
 RUN librarian-puppet install && \
